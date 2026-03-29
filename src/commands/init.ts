@@ -17,7 +17,7 @@ import {
 export default class Init extends Command {
   static override id = 'init'
   static override description =
-    'Create docs/, specs/.meta, changes/active/ and changes/completed/, scan TypeScript, write arch-baseline.json, reopenspec.json, inject IDE workflows, copy Cursor slash-command templates to .cursor/commands/, optionally configure MCP in ~/.cursor/mcp.json, and add reopenspec.project.yaml if missing (use --skip-workflow / --skip-mcp-setup to opt out).'
+    'Create reopenspec/docs/, reopenspec/specs/.meta, reopenspec/changes/active/ and reopenspec/changes/completed/, scan TypeScript, write arch-baseline.json, reopenspec.json, inject IDE workflows, copy Cursor slash-command templates to .cursor/commands/, optionally configure MCP in ~/.cursor/mcp.json, and add reopenspec.project.yaml if missing (use --skip-workflow / --skip-mcp-setup to opt out).'
   static override examples = [
     '<%= config.bin %> init',
     '<%= config.bin %> init -c . --force',
@@ -55,11 +55,12 @@ export default class Init extends Command {
     const { flags } = await this.parse(Init)
     const cwd = resolve(flags.cwd)
 
-    mkdirSync(join(cwd, 'docs'), { recursive: true })
-    mkdirSync(join(cwd, 'changes', 'active'), { recursive: true })
-    mkdirSync(join(cwd, 'changes', 'completed'), { recursive: true })
-    mkdirSync(join(cwd, 'specs', '.meta'), { recursive: true })
-    mkdirSync(join(cwd, 'specs'), { recursive: true })
+    const rs = join(cwd, 'reopenspec')
+    mkdirSync(join(rs, 'docs'), { recursive: true })
+    mkdirSync(join(rs, 'changes', 'active'), { recursive: true })
+    mkdirSync(join(rs, 'changes', 'completed'), { recursive: true })
+    mkdirSync(join(rs, 'specs', '.meta'), { recursive: true })
+    mkdirSync(join(rs, 'specs'), { recursive: true })
 
     const gitignorePath = join(cwd, '.gitignore')
     if (existsSync(gitignorePath)) {

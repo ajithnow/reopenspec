@@ -37,13 +37,13 @@ export function copyProjectYamlTemplate(workspaceRoot: string): string | null {
   return 'reopenspec.project.yaml'
 }
 
-/** Copy bundled `docs/reopenspec-model.md` if the project does not already have it. */
+/** Copy bundled architecture model into `reopenspec/docs/` if missing. */
 export function copyReopenSpecModelDocIfMissing(workspaceRoot: string): string | null {
-  const dest = join(workspaceRoot, 'docs', 'reopenspec-model.md')
+  const dest = join(workspaceRoot, 'reopenspec', 'docs', 'reopenspec-model.md')
   if (existsSync(dest)) return null
-  mkdirSync(join(workspaceRoot, 'docs'), { recursive: true })
+  mkdirSync(join(workspaceRoot, 'reopenspec', 'docs'), { recursive: true })
   const src = join(resolvePackageRootFromLib(), 'docs', 'reopenspec-model.md')
   if (!existsSync(src)) return null
   copyFileSync(src, dest)
-  return 'docs/reopenspec-model.md'
+  return 'reopenspec/docs/reopenspec-model.md'
 }

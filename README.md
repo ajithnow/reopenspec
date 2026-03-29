@@ -10,12 +10,12 @@ ReOpenSpec assumes (and `reo init` creates) three cooperating areas at the proje
 
 | Path | Role |
 |------|------|
-| **`docs/`** | Architecture narratives, ADRs, runbooks, team conventions — context that is **not** the live behavioral contract. |
-| **`specs/`** | Domain behavior, scenarios, and **`api-contracts.json`** — the **source of truth**, cross-checked against code via baseline + drift. |
-| **`changes/active/`** | In-flight work: one folder per story, task, or bug (e.g. `task-azure-1234-make-login`, `bug-jira-4421-timeout`) after **`/reo-plan`** — plan, design, tasks, **`delta.md`** vs `specs/`. |
-| **`changes/completed/`** | Done work: same slug as in `active/`, moved here with a **`YYYY-MM-DD-`** date prefix when **`/reo-completed`** runs (e.g. `2026-02-06-task-azure-1234-make-login`). |
+| **`reopenspec/docs/`** | Architecture narratives, ADRs, runbooks, team conventions — context that is **not** the live behavioral contract. |
+| **`reopenspec/specs/`** | Domain behavior, scenarios, and **`api-contracts.json`** — the **source of truth**, cross-checked against code via baseline + drift. |
+| **`reopenspec/changes/active/`** | In-flight work: one folder per story, task, or bug (e.g. `task-azure-1234-make-login`, `bug-jira-4421-timeout`) after **`/reo-plan`** — plan, design, tasks, **`delta.md`** vs `reopenspec/specs/`. |
+| **`reopenspec/changes/completed/`** | Done work: same slug as in `active/`, moved here with a **`YYYY-MM-DD-`** date prefix when **`/reo-completed`** runs (e.g. `2026-02-06-task-azure-1234-make-login`). |
 
-See **[`docs/reopenspec-model.md`](docs/reopenspec-model.md)** for the full architectural model (deltas, archive, and how this differs from a generic OpenSpec clone).
+See **[`reopenspec/docs/reopenspec-model.md`](reopenspec/docs/reopenspec-model.md)** for the full architectural model (deltas, archive, and how this differs from a generic OpenSpec clone).
 
 ## Requirements
 
@@ -44,24 +44,24 @@ node bin/run.js --help
    reo init
    ```
 
-   This creates **`docs/`**, **`changes/active/`**, **`changes/completed/`**, **`specs/`** and **`specs/.meta/`**, writes `reopenspec.json` if missing, runs a scan, injects Cursor rules (or `.ai-context/AGENTS.md` as a fallback), copies **slash-command templates** to `.cursor/commands/`, and adds **`reopenspec.project.yaml`** when missing. Use **`reo init --skip-workflow`** if you only want baseline + config without those files.
+   This creates **`reopenspec/docs/`**, **`reopenspec/changes/active/`**, **`reopenspec/changes/completed/`**, **`reopenspec/specs/`** and **`reopenspec/specs/.meta/`**, writes `reopenspec.json` if missing, runs a scan, injects Cursor rules (or `.ai-context/AGENTS.md` as a fallback), copies **slash-command templates** to `.cursor/commands/`, and adds **`reopenspec.project.yaml`** when missing. Use **`reo init --skip-workflow`** if you only want baseline + config without those files.
 
 2. **Traceable feature flow (IDE)** follows a true 5-step lifecycle:
    - **`reo init`**: Sets up folders, ignores your local IDE profile (`.reopenspec.user.yaml`), and copies IDE workflows.
    - **`/reo-blueprint`**: Generates architecture specs and rules native to your IDE choice (Cursor, Roo, Windsurf).
-   - **`/reo-plan`**: Connects via Project Management MCPs (Azure/Jira), tracks dependencies, and provisions a traced scaffold under **`changes/active/`** (e.g. `changes/active/story-azure-authflow-setup/`, `changes/active/bug-azure-5678-null-ref/`) driven by a strict `change.yaml`.
+   - **`/reo-plan`**: Connects via Project Management MCPs (Azure/Jira), tracks dependencies, and provisions a traced scaffold under **`reopenspec/changes/active/`** (e.g. `reopenspec/changes/active/story-azure-authflow-setup/`, `reopenspec/changes/active/bug-azure-5678-null-ref/`) driven by a strict `change.yaml`.
    - **`/reo-proceed-plan`**: Reads the change folder and implements the feature.
-   - **`/reo-completed`** (human-run after checking proceed-plan work): the agent **proposes** updates to **`specs/`**; you **confirm** before any spec write, then **confirm again** before moving the folder to **`changes/completed/YYYY-MM-DD-.../`** (see **`commands/reo-completed.md`**).
+   - **`/reo-completed`** (human-run after checking proceed-plan work): the agent **proposes** updates to **`reopenspec/specs/`**; you **confirm** before any spec write, then **confirm again** before moving the folder to **`reopenspec/changes/completed/YYYY-MM-DD-.../`** (see **`commands/reo-completed.md`**).
    
    See [`commands/README.md`](commands/README.md) for full context.
 
-3. Add or scaffold main-line specs (optional if you only use **`changes/active/`** folders):
+3. Add or scaffold main-line specs (optional if you only use **`reopenspec/changes/active/`** folders):
 
    ```bash
    reo spec new my-feature
    ```
 
-4. Point contracts at real exports in `specs/<feature>/api-contracts.json` (`mapsTo`: file path, symbol, kind).
+4. Point contracts at real exports in `reopenspec/specs/<feature>/api-contracts.json` (`mapsTo`: file path, symbol, kind).
 
 5. Refresh baseline + drift:
 
@@ -69,7 +69,7 @@ node bin/run.js --help
    reo sync
    ```
 
-   Outputs default to `specs/.meta/arch-baseline.json` and `specs/.meta/drift-report.json` (configurable in `reopenspec.json`).
+   Outputs default to `reopenspec/specs/.meta/arch-baseline.json` and `reopenspec/specs/.meta/drift-report.json` (configurable in `reopenspec.json`).
 
 ## Commands
 
@@ -79,7 +79,7 @@ node bin/run.js --help
 | `reo init --skip-workflow`        | Same as above but without copying slash commands or adding `reopenspec.project.yaml`                                                      |
 | `reo sync`                        | Full scan + drift report                                                                                                                  |
 | `reo scan`                        | Baseline only                                                                                                                             |
-| `reo drift` / `reo diff`          | Drift vs `specs/*/api-contracts.json`                                                                                                     |
+| `reo drift` / `reo diff`          | Drift vs `reopenspec/specs/*/api-contracts.json`                                                                                                     |
 | `reo spec new <slug>`             | Scaffold feature folder + `.spec-meta.json`                                                                                               |
 | `reo inject`                      | Re-apply injected rules                                                                                                                   |
 | `reo config`                      | Show or create `reopenspec.json`                                                                                                          |
@@ -95,7 +95,9 @@ Run `reo <command> --help` for flags.
 
 ## Configuration
 
-`reopenspec.json` at the repo root (or `specs/.meta/reopenspec.json`) can set `baselinePath`, `driftReportPath`, `specsDir`, and `strictUncovered`.
+`reopenspec.json` at the repo root (or `reopenspec/specs/.meta/reopenspec.json`, or legacy `specs/.meta/reopenspec.json`) can set `baselinePath`, `driftReportPath`, `specsDir`, and `strictUncovered`.
+
+**Migrating from root-level `specs/`:** move folders to `reopenspec/specs/` (and `reopenspec/docs/`, `reopenspec/changes/…`) or set `specsDir`, `baselinePath`, and `driftReportPath` in `reopenspec.json` to your existing paths.
 
 ## VS Code
 
@@ -103,8 +105,8 @@ A minimal extension lives under `editors/vscode/` (config editor + run sync). Bu
 
 ## Docs in this repo
 
-- [`docs/reopenspec-model.md`](docs/reopenspec-model.md) — **docs / specs / changes** model, deltas, and archive
-- [`commands/README.md`](commands/README.md) — optional Cursor slash-command templates (`/reo-*`) aligned with `specs/` and `changes/`
+- [`reopenspec/docs/reopenspec-model.md`](reopenspec/docs/reopenspec-model.md) — **docs / specs / changes** model, deltas, and archive
+- [`commands/README.md`](commands/README.md) — optional Cursor slash-command templates (`/reo-*`) aligned with `reopenspec/specs/` and `reopenspec/changes/`
 
 ## License
 

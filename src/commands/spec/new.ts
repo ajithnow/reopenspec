@@ -15,7 +15,7 @@ function slugify(s: string): string {
 export default class SpecNew extends Command {
   static override id = 'spec:new'
   static override description =
-    'Scaffold specs/{feature-slug}/ with overview, architecture, api-contracts, tasks, decisions, and .spec-meta.json.'
+    'Scaffold reopenspec/specs/{feature-slug}/ with overview, architecture, api-contracts, tasks, decisions, and .spec-meta.json.'
   static override examples = ['<%= config.bin %> spec new my-feature']
 
   static override args = {

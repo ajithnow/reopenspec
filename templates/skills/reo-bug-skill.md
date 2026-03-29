@@ -37,4 +37,4 @@ STEP 4 — Output shape
 
 Return: `bug`, `parent`, `repro`, `severity`, `dependencies[]`, `can_proceed`, `blockers[]`, `duplicate_of` (if any)
 
-Do not write files. If `can_proceed` is false, **`/reo-plan`** must not materialize `changes/active/` unless the developer overrides.
+Do not write files. If `can_proceed` is false, **`/reo-plan`** must not materialize `reopenspec/changes/active/` unless the developer overrides.

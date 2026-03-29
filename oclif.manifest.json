@@ -50,7 +50,7 @@
     "diff": {
       "aliases": [],
       "args": {},
-      "description": "Run drift check only (alias for drift): compare baseline to specs/*/api-contracts.json.",
+      "description": "Run drift check only (alias for drift): compare baseline to reopenspec/specs/*/api-contracts.json.",
       "examples": [
         "<%= config.bin %> diff",
         "<%= config.bin %> diff --skipScan"
@@ -111,7 +111,7 @@
     "drift": {
       "aliases": [],
       "args": {},
-      "description": "Compare arch-baseline.json against specs/*/api-contracts.json and emit drift-report.json.",
+      "description": "Compare arch-baseline.json against reopenspec/specs/*/api-contracts.json and emit drift-report.json.",
       "examples": [
         "<%= config.bin %> drift",
         "<%= config.bin %> drift --strictUncovered",
@@ -173,7 +173,7 @@
     "init": {
       "aliases": [],
       "args": {},
-      "description": "Create docs/, specs/.meta, changes/active/ and changes/completed/, scan TypeScript, write arch-baseline.json, reopenspec.json, inject IDE workflows, copy Cursor slash-command templates to .cursor/commands/, optionally configure MCP in ~/.cursor/mcp.json, and add reopenspec.project.yaml if missing (use --skip-workflow / --skip-mcp-setup to opt out).",
+      "description": "Create reopenspec/docs/, reopenspec/specs/.meta, reopenspec/changes/active/ and reopenspec/changes/completed/, scan TypeScript, write arch-baseline.json, reopenspec.json, inject IDE workflows, copy Cursor slash-command templates to .cursor/commands/, optionally configure MCP in ~/.cursor/mcp.json, and add reopenspec.project.yaml if missing (use --skip-workflow / --skip-mcp-setup to opt out).",
       "examples": [
         "<%= config.bin %> init",
         "<%= config.bin %> init -c . --force",
@@ -477,7 +477,7 @@
           "required": true
         }
       },
-      "description": "Scaffold specs/{feature-slug}/ with overview, architecture, api-contracts, tasks, decisions, and .spec-meta.json.",
+      "description": "Scaffold reopenspec/specs/{feature-slug}/ with overview, architecture, api-contracts, tasks, decisions, and .spec-meta.json.",
       "examples": [
         "<%= config.bin %> spec new my-feature"
       ],

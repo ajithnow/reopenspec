@@ -3,6 +3,12 @@ import { join, resolve } from 'node:path'
 
 export const REOPENSPEC_CONFIG_FILENAME = 'reopenspec.json'
 
+/** Root folder in a consuming repo for docs, specs, and changes (not the npm package name). */
+export const REOPENSPEC_PROJECT_ROOT = 'reopenspec'
+
+/** Default `specsDir` (domain specs + `.meta` live under here). */
+export const DEFAULT_SPECS_DIR = `${REOPENSPEC_PROJECT_ROOT}/specs`
+
 /** Supported version in on-disk JSON (bump when shape changes). */
 export const REOPENSPEC_CONFIG_VERSION = '0.1.0' as const
 
@@ -24,9 +30,9 @@ export type ResolvedReopenSpecConfig = {
 }
 
 const defaults: ResolvedReopenSpecConfig = {
-  baselinePath: 'specs/.meta/arch-baseline.json',
-  driftReportPath: 'specs/.meta/drift-report.json',
-  specsDir: 'specs',
+  baselinePath: `${REOPENSPEC_PROJECT_ROOT}/specs/.meta/arch-baseline.json`,
+  driftReportPath: `${REOPENSPEC_PROJECT_ROOT}/specs/.meta/drift-report.json`,
+  specsDir: DEFAULT_SPECS_DIR,
   strictUncovered: false,
 }
 
@@ -35,17 +41,24 @@ export function configFilePathWorkspaceRoot(workspaceRoot: string): string {
   return resolve(workspaceRoot, REOPENSPEC_CONFIG_FILENAME)
 }
 
-/** Alternate location per requirements (`/specs/.meta/reopenspec.json`). */
+/** Alternate: `reopenspec/specs/.meta/reopenspec.json`. */
 export function configFilePathSpecsMeta(workspaceRoot: string): string {
+  return resolve(workspaceRoot, REOPENSPEC_PROJECT_ROOT, 'specs', '.meta', REOPENSPEC_CONFIG_FILENAME)
+}
+
+/** Legacy: `specs/.meta/reopenspec.json` (before nested `reopenspec/` layout). */
+export function configFilePathSpecsMetaLegacy(workspaceRoot: string): string {
   return resolve(workspaceRoot, 'specs', '.meta', REOPENSPEC_CONFIG_FILENAME)
 }
 
-/** Resolve which config file to use: root first, then `specs/.meta/`. */
+/** Resolve which config file to use: root first, then `reopenspec/specs/.meta/`, then legacy `specs/.meta/`. */
 export function resolveExistingConfigPath(workspaceRoot: string): string | null {
   const rootPath = configFilePathWorkspaceRoot(workspaceRoot)
   const metaPath = configFilePathSpecsMeta(workspaceRoot)
+  const legacyMetaPath = configFilePathSpecsMetaLegacy(workspaceRoot)
   if (existsSync(rootPath)) return rootPath
   if (existsSync(metaPath)) return metaPath
+  if (existsSync(legacyMetaPath)) return legacyMetaPath
   return null
 }
 
@@ -80,7 +93,7 @@ function parseFile(raw: unknown, path: string): ReopenSpecConfigFile {
   return out
 }
 
-/** Load and merge `reopenspec.json` (root or `specs/.meta/`); returns defaults if missing. */
+/** Load and merge `reopenspec.json` (root, `reopenspec/specs/.meta/`, or legacy `specs/.meta/`); returns defaults if missing. */
 export function loadResolvedConfig(workspaceRoot: string): {
   filePath: string
   fileExists: boolean

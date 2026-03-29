@@ -1,17 +1,17 @@
 ---
-description: Plan a traceable change — work item + delta vs main specs → changes/active/<slug>/ (STRICT CONTRACT)
+description: Plan a traceable change — work item + delta vs main specs → reopenspec/changes/active/<slug>/ (STRICT CONTRACT)
 argument-hint: story|task|bug id, optional -comments, or freeform brief
 ---
 
 ROLE: Software Architect / Technical Lead
 
 Focus on:
-- One **traceable change** folder under `changes/active/<change-domain-id>/`
-- **Delta** against existing `specs/` and baseline (what is new vs what already exists)
+- One **traceable change** folder under `reopenspec/changes/active/<change-domain-id>/`
+- **Delta** against existing `reopenspec/specs/` and baseline (what is new vs what already exists)
 - Correct **dependency order** before implementation
 
 Do NOT:
-- Write `changes/active/**` files on disk before developer **approval**
+- Write `reopenspec/changes/active/**` files on disk before developer **approval**
 - Invent work-item fields; fetch via MCP when configured
 
 ---
@@ -21,12 +21,12 @@ Do NOT:
 1. Load **`reopenspec.project.yaml`** (if missing, stop and ask user to run **`/reo-blueprint`** or `reo init` — or **`reo init --skip-workflow`** was used and they need the YAML template).
 2. Resolve **work-item integration** from **`reopenspec.project.yaml`**, **`.cursor/config.json`**, and any **skills** the project added (no hard-coded vendor — adapters are config- and skill-driven).
 3. Depending on input, follow **Story**, **Task**, or **Bug** path (see `templates/skills/reo-story-skill.md`, `templates/skills/reo-task-skill.md`, `templates/skills/reo-bug-skill.md` — this command orchestrates them).
-4. Load **main-line specs** (`specs/**`, `reopenspec.json`, `specs/.meta/arch-baseline.json`) and summarize **delta** (scope added/changed vs baseline).
-5. Show **plan + design + tasks + delta** in chat; After you type **`approved`**, creates **`changes/active/<change-domain-id>/`**: `change.yaml`, `plan.md`, `design.md`, `tasks.md`, `delta.md`.
+4. Load **main-line specs** (`reopenspec/specs/**`, `reopenspec.json`, `reopenspec/specs/.meta/arch-baseline.json`) and summarize **delta** (scope added/changed vs baseline).
+5. Show **plan + design + tasks + delta** in chat; After you type **`approved`**, creates **`reopenspec/changes/active/<change-domain-id>/`**: `change.yaml`, `plan.md`, `design.md`, `tasks.md`, `delta.md`.
 
 ---
 
-> **Strict contract:** No files under `changes/active/` until STEP 6 approval.
+> **Strict contract:** No files under `reopenspec/changes/active/` until STEP 6 approval.
 
 ---
 
@@ -67,7 +67,7 @@ STEP 2 — Fetch work item (if not manual)
 - **Task-level item**: use **`templates/skills/reo-task-skill.md`** behavior — load task, parent context, predecessors/dependencies, blocked state.
 - **Bug / defect item**: use **`templates/skills/reo-bug-skill.md`** behavior — load repro, severity, environment, parent feature, dependencies/duplicates, blocked state.
 
-**If `none` or integration unavailable:** switch to **manual** mode — ask the user to paste title, AC, and scope; still produce delta vs `specs/`.
+**If `none` or integration unavailable:** switch to **manual** mode — ask the user to paste title, AC, and scope; still produce delta vs `reopenspec/specs/`.
 
 Detailed fetch steps are aligned with **`templates/skills/reo-story-skill.md`**, **`templates/skills/reo-task-skill.md`**, and **`templates/skills/reo-bug-skill.md`**; do not skip dependency checks for **tasks** or **bugs** when the tracker exposes them.
 
@@ -77,7 +77,7 @@ STEP 3 — Gate: can we proceed?
 
 For **tasks**:
 
-- If a **blocking** dependency exists (incomplete predecessor or parent story not ready), **stop** with `Status: BLOCKED` and list blockers — do **not** create `changes/active/` yet unless developer explicitly overrides with a written reason in chat.
+- If a **blocking** dependency exists (incomplete predecessor or parent story not ready), **stop** with `Status: BLOCKED` and list blockers — do **not** create `reopenspec/changes/active/` yet unless developer explicitly overrides with a written reason in chat.
 
 For **bugs**:
 
@@ -92,7 +92,7 @@ For **stories**:
 
 STEP 4 — Delta vs main specs
 
-Scan **`specs/`** (overviews, architecture, `api-contracts.json` per feature) and baseline summary.
+Scan **`reopenspec/specs/`** (overviews, architecture, `api-contracts.json` per feature) and baseline summary.
 
 Produce **`delta.md` content** (in chat first):
 
@@ -119,7 +119,7 @@ STEP 6 — Developer approval (BLOCKING)
 
 Ask developer to reply with **`approved`** to materialize the change folder.
 
-Until then: **no** `changes/active/**` writes.
+Until then: **no** `reopenspec/changes/active/**` writes.
 
 ---
 
@@ -149,7 +149,7 @@ created_at: "<ISO8601>"
 `<change.root>/active/<change-domain-id>/tasks.md`  
 `<change.root>/active/<change-domain-id>/delta.md`
 
-Optionally update or reference **`specs/`** only if the team wants main-line spec updated in the same commit (default: **change folder is source of truth for this branch** until merged).
+Optionally update or reference **`reopenspec/specs/`** only if the team wants main-line spec updated in the same commit (default: **change folder is source of truth for this branch** until merged).
 
 ---
 
@@ -162,5 +162,5 @@ Commit only these files if the user wants a checkpoint; otherwise leave uncommit
 STEP 9 — Cursor response
 
 - Status: `PLAN_MATERIALIZED`
-- Details: Path to `changes/active/<change-domain-id>/` and summary
-- Next: **`/reo-proceed-plan @changes/active/<change-domain-id>`** (or full path)
+- Details: Path to `reopenspec/changes/active/<change-domain-id>/` and summary
+- Next: **`/reo-proceed-plan @reopenspec/changes/active/<change-domain-id>`** (or full path)
