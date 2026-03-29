@@ -173,11 +173,12 @@
     "init": {
       "aliases": [],
       "args": {},
-      "description": "Create specs/.meta, scan TypeScript, write arch-baseline.json, reopenspec.json, inject IDE workflows, copy Cursor slash-command templates to .cursor/commands/, and add reopenspec.project.yaml if missing (use --skip-workflow to opt out).",
+      "description": "Create docs/, specs/.meta, changes/active/ and changes/completed/, scan TypeScript, write arch-baseline.json, reopenspec.json, inject IDE workflows, copy Cursor slash-command templates to .cursor/commands/, optionally configure MCP in ~/.cursor/mcp.json, and add reopenspec.project.yaml if missing (use --skip-workflow / --skip-mcp-setup to opt out).",
       "examples": [
         "<%= config.bin %> init",
         "<%= config.bin %> init -c . --force",
-        "<%= config.bin %> init --skip-workflow"
+        "<%= config.bin %> init --skip-workflow",
+        "<%= config.bin %> init --skip-mcp-setup"
       ],
       "flags": {
         "cwd": {
@@ -204,6 +205,12 @@
         "skipWorkflow": {
           "description": "Do not copy slash-command templates to .cursor/commands/ or add reopenspec.project.yaml",
           "name": "skipWorkflow",
+          "allowNo": false,
+          "type": "boolean"
+        },
+        "skipMcpSetup": {
+          "description": "Do not prompt to merge MCP server entries into ~/.cursor/mcp.json (Cursor user config)",
+          "name": "skipMcpSetup",
           "allowNo": false,
           "type": "boolean"
         }

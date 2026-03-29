@@ -1,12 +1,12 @@
 ---
 description: Execute approved tasks for a traceable change folder (after /reo-plan)
-argument-hint: "@change/<change-domain-id>" or folder path
+argument-hint: "@changes/active/<change-domain-id>" or folder path
 ---
 
 ROLE: Senior Software Engineer
 
 Focus on:
-- Implementing **`change/<change-domain-id>/tasks.md`** in order
+- Implementing **`changes/active/<change-domain-id>/tasks.md`** in order
 - Keeping **`delta.md`** and **`plan.md`** aligned with reality
 - Updating **`specs/`** contracts when the change touches public API (per team policy)
 
@@ -23,7 +23,7 @@ STEP 1 — Resolve change folder
 
 From `$ARGUMENTS` or `@mention`, resolve:
 
-`change/<change-domain-id>/`
+`changes/active/<change-domain-id>/`
 
 Must contain: `plan.md`, `tasks.md`, `delta.md` (and `design.md` if present).
 
@@ -50,7 +50,7 @@ STEP 4 — Implementation log
 
 Create or update:
 
-`change/<change-domain-id>/implementation.md`
+`changes/active/<change-domain-id>/implementation.md`
 
 Sections: files touched, decisions, deviations from plan, follow-ups for **`reo sync`**.
 

@@ -7,19 +7,22 @@ import {
   loadResolvedConfig,
   writeDefaultConfigFile,
 } from '../lib/reopenspec-config.js'
+import { runMcpInteractiveSetup } from '../lib/mcp-interactive-setup.js'
 import {
   copyProjectYamlTemplate,
+  copyReopenSpecModelDocIfMissing,
   copyWorkflowCommandsToProject,
 } from '../lib/workflow-copy.js'
 
 export default class Init extends Command {
   static override id = 'init'
   static override description =
-    'Create specs/.meta, scan TypeScript, write arch-baseline.json, reopenspec.json, inject IDE workflows, copy Cursor slash-command templates to .cursor/commands/, and add reopenspec.project.yaml if missing (use --skip-workflow to opt out).'
+    'Create docs/, specs/.meta, changes/active/ and changes/completed/, scan TypeScript, write arch-baseline.json, reopenspec.json, inject IDE workflows, copy Cursor slash-command templates to .cursor/commands/, optionally configure MCP in ~/.cursor/mcp.json, and add reopenspec.project.yaml if missing (use --skip-workflow / --skip-mcp-setup to opt out).'
   static override examples = [
     '<%= config.bin %> init',
     '<%= config.bin %> init -c . --force',
     '<%= config.bin %> init --skip-workflow',
+    '<%= config.bin %> init --skip-mcp-setup',
   ]
 
   static override flags = {
@@ -41,12 +44,20 @@ export default class Init extends Command {
         'Do not copy slash-command templates to .cursor/commands/ or add reopenspec.project.yaml',
       default: false,
     }),
+    skipMcpSetup: Flags.boolean({
+      description:
+        'Do not prompt to merge MCP server entries into ~/.cursor/mcp.json (Cursor user config)',
+      default: false,
+    }),
   }
 
   async run(): Promise<void> {
     const { flags } = await this.parse(Init)
     const cwd = resolve(flags.cwd)
 
+    mkdirSync(join(cwd, 'docs'), { recursive: true })
+    mkdirSync(join(cwd, 'changes', 'active'), { recursive: true })
+    mkdirSync(join(cwd, 'changes', 'completed'), { recursive: true })
     mkdirSync(join(cwd, 'specs', '.meta'), { recursive: true })
     mkdirSync(join(cwd, 'specs'), { recursive: true })
 
@@ -92,6 +103,15 @@ export default class Init extends Command {
       }
     }
 
+    try {
+      const modelDoc = copyReopenSpecModelDocIfMissing(cwd)
+      if (modelDoc) {
+        this.log(`Wrote ${modelDoc} (template)`)
+      }
+    } catch (e) {
+      this.warn(e instanceof Error ? e.message : String(e))
+    }
+
     if (!flags.skipWorkflow) {
       try {
         const copied = copyWorkflowCommandsToProject(cwd)
@@ -110,6 +130,14 @@ export default class Init extends Command {
         )
       }
     }
+
+    await runMcpInteractiveSetup({
+      workspaceRoot: cwd,
+      skip: flags.skipMcpSetup,
+      ide: 'cursor',
+      log: (m) => this.log(m),
+      warn: (m) => this.warn(m),
+    })
 
     this.log(
       `Summary: ${baseline.modules.length} module(s), ${baseline.nodes.length} export node(s), languages: ${baseline.meta.languages.join(', ') || '(none)'}`,

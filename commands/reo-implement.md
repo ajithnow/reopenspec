@@ -1,11 +1,11 @@
 ---
-description: Implement approved tasks under specs/<feature-id>/ — legacy layout; prefer /reo-proceed-plan for change/
+description: Implement approved tasks under specs/<feature-id>/ — legacy layout; prefer /reo-proceed-plan for changes/active/
 ---
 
 ROLE: Senior Software Engineer / Senior Developer
 
-**Prefer the traceable flow:** `/reo-plan` → materialize **`change/<change-domain-id>/`** → **`/reo-proceed-plan @change/...`**.  
-Use **this command** when work lives under **`specs/<feature-id>/`** (e.g. after `reo spec new`) **without** a `change/` folder.
+**Prefer the traceable flow:** `/reo-plan` → materialize **`changes/active/<change-domain-id>/`** → **`/reo-proceed-plan @changes/active/...`**.  
+Use **this command** when work lives under **`specs/<feature-id>/`** (e.g. after `reo spec new`) **without** a **`changes/active/`** folder.
 
 Focus on:
 - Writing clean, maintainable code

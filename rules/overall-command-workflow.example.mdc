@@ -16,7 +16,7 @@ The standard **traceable** workflow (templates in `commands/reo-*.md`; `reo init
 
 /reo-blueprint → /reo-plan → /reo-proceed-plan → /reo-review → /reo-test → /reo-pr
 
-- **`/reo-plan`** writes **`change/<change-domain-id>/`** (`plan.md`, `design.md`, `tasks.md`, `delta.md`) after approval; skills **`/reo-story-skill`** / **`/reo-task-skill`** follow whatever work-item adapter the project configured.
+- **`/reo-plan`** writes **`changes/active/<change-domain-id>/`** (`plan.md`, `design.md`, `tasks.md`, `delta.md`) after approval; skills **`/reo-story-skill`** / **`/reo-task-skill`** / **`/reo-bug-skill`** follow whatever work-item adapter the project configured.
 - **`/reo-implement`** is for legacy **`specs/<feature>/`** layout only.
 - Optional: **`/reo-spec-work-item`** or **`reo spec new <slug>`** for main-line **`specs/`** content.
 
@@ -46,9 +46,9 @@ Command:
 
 Purpose:
 
-Use the **configured** work-item integration (skills / MCP per project) to load story or task; check dependencies; compute **delta vs `specs/`**; after approval write **`change/<change-domain-id>/`**.
+Use the **configured** work-item integration (skills / MCP per project) to load story, task, or bug; check dependencies; compute **delta vs `specs/`**; after approval write **`changes/active/<change-domain-id>/`**.
 
-Helpers: **`/reo-story-skill`**, **`/reo-task-skill`**.
+Helpers: **`/reo-story-skill`**, **`/reo-task-skill`**, **`/reo-bug-skill`**.
 
 ---
 
@@ -56,7 +56,7 @@ Helpers: **`/reo-story-skill`**, **`/reo-task-skill`**.
 
 Command:
 
-/reo-proceed-plan @change/<change-domain-id>
+/reo-proceed-plan @changes/active/<change-domain-id>
 
 Purpose:
 
@@ -130,7 +130,7 @@ Commands must not skip required stages.
 
 Example:
 
-/reo-proceed-plan must not run before `/reo-plan` has materialized the `change/` folder.
+/reo-proceed-plan must not run before `/reo-plan` has materialized the `changes/active/` folder.
 
 ---
 
@@ -175,7 +175,7 @@ NEXT STEP
 Example:
 
 NEXT STEP
-Run /reo-proceed-plan @change/<change-domain-id> to begin implementation.
+Run /reo-proceed-plan @changes/active/<change-domain-id> to begin implementation.
 
 ---
 
@@ -185,9 +185,9 @@ AI must not invent requirements, APIs, database schema, or architecture details.
 
 If required information is missing from:
 
-- `change/<id>/plan.md` (or legacy `specs/.../overview.md`)
-- `change/<id>/tasks.md`
-- `change/<id>/delta.md`
+- `changes/active/<id>/plan.md` (or legacy `specs/.../overview.md`)
+- `changes/active/<id>/tasks.md`
+- `changes/active/<id>/delta.md`
 - `design.md` when applicable
 
 AI must stop execution and request clarification from the developer.

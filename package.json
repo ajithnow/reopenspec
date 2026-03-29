@@ -12,6 +12,7 @@
     "bin",
     "dist",
     "commands",
+    "docs",
     "templates",
     "oclif.manifest.json",
     "LICENSE",

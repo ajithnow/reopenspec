@@ -8,7 +8,7 @@ description: Blueprint the repository — project YAML, architecture, docs, and 
 
 1. **`reo init`** — CLI lays down IDE rules + copies slash commands + `reopenspec.project.yaml` when missing (omit with **`reo init --skip-workflow`**). It also adds `.reopenspec.user.yaml` to `.gitignore`.
 2. **`/reo:blueprint`** (this command) — **Initial** pass: classify greenfield vs brownfield, write **`reopenspec.project.yaml`**, architecture + guidelines, IDE rules (reading local `.reopenspec.user.yaml` for tool choice), gold-standard files.
-3. **`/reo-plan`** — Pull story/task via **configured** skills/MCP (see `reopenspec.project.yaml`), compute **delta vs `specs/`**, then after approval write **`change/<change-domain-id>/`** (`plan.md`, `design.md`, `tasks.md`, `delta.md`).
+3. **`/reo-plan`** — Pull story / task / bug via **configured** skills/MCP (see `reopenspec.project.yaml`), compute **delta vs `specs/`**, then after approval write **`changes/active/<change-domain-id>/`** (`plan.md`, `design.md`, `tasks.md`, `delta.md`).
 4. **`/reo-proceed-plan`** — Start implementation for a traced change folder.
 
 ROLE: System Analyst / Technical Analyst
@@ -70,7 +70,7 @@ Use this shape (fill values from discovery):
 - `version`: `"1"`
 - `project_type`: `greenfield` | `brownfield` (from STEP 0)
 - `platforms.work_tracking`: `none` until the team wires an adapter — or a project-specific token (skills read this); prefer documenting integrations under optional `integrations` in this file or linked config
-- `change.root`: `change` (default; each change lives under `change/<change-domain-id>/`)
+- `change.root`: `changes` (default; in-flight work lives under `changes/active/<change-domain-id>/`; completed moves to `changes/completed/<YYYY-MM-DD>-<change-domain-id>/`)
 - `traceability.main_specs_dir`: `specs`
 - `traceability.baseline_json`: path from `reopenspec.json` / defaults (`specs/.meta/arch-baseline.json`)
 
@@ -318,7 +318,7 @@ Replace hardcoded tech assumptions with:
 Ensure compatibility with:
 
 `/reo-plan`  
-`/reo-story-skill` / `/reo-task-skill` (invoked from plan or standalone)  
+`/reo-story-skill` / `/reo-task-skill` / `/reo-bug-skill` (invoked from plan or standalone)  
 `/reo-spec-work-item` (optional: fill `specs/…/overview.md` from external item)  
 `/reo-proceed-plan`  
 `/reo-implement` (legacy `specs/<feature>/` path)  
@@ -368,4 +368,4 @@ STEP 9 — Cursor Response
 
 Status: `BLUEPRINT_COMPLETE`  
 Details: Project analyzed, `reopenspec.project.yaml` ensured, rules generated  
-Next: `/reo-plan` (with story/task id or manual brief); optional `reo spec new <slug>` for main-line specs under `specs/`
+Next: `/reo-plan` (with story/task/bug id or manual brief); optional `reo spec new <slug>` for main-line specs under `specs/`
