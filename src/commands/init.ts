@@ -268,13 +268,17 @@ export default class Init extends Command {
       }
     }
 
-    await runMcpInteractiveSetup({
-      workspaceRoot: cwd,
-      skip: flags.skipMcpSetup,
-      ide: 'cursor',
-      log: (m) => this.log(m),
-      warn: (m) => this.warn(m),
-    })
+    for (const ide of ides) {
+      if (ide === 'cursor' || ide === 'antigravity') {
+        await runMcpInteractiveSetup({
+          workspaceRoot: cwd,
+          skip: flags.skipMcpSetup,
+          ide: ide as 'cursor' | 'antigravity',
+          log: (m) => this.log(m),
+          warn: (m) => this.warn(m),
+        })
+      }
+    }
 
     this.log(
       `Summary: ${baseline.modules.length} module(s), ${baseline.nodes.length} export node(s), languages: ${baseline.meta.languages.join(', ') || '(none)'}`,

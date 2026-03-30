@@ -14,6 +14,7 @@
     "commands",
     "docs",
     "templates",
+    "rules",
     "oclif.manifest.json",
     "LICENSE",
     "README.md"
