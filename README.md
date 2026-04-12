@@ -1,122 +1,87 @@
-# ReOpenSpec
+# 🚀 ReOpenSpec
 
-**Spec-driven architecture baseline, drift checks, and context-aware IDE workflow injection.** 
+**Stop your AI agents from hallucinating architecture.**
 
-ReOpenSpec an agentic workflow engine that scans your repository into `arch-baseline.json`, compares each feature’s `api-contracts.json` to that baseline (drift), and injects tailored IDE rules natively based on your environment (Cursor, Windsurf, or Roo). It grounds AI agents in firm architectural contracts and drastically reduces AI context pollution.
+ReOpenSpec is an agentic workflow engine that grounds your AI coding assistants (like Cursor, Windsurf, Roo, and Cline) in reality. It scans your codebase, builds a deterministic map of your architecture, and injects exactly the right rules at exactly the right time. 
 
-It sits in the same problem space as [OpenSpec](https://github.com/Fission-AI/OpenSpec) (specs in git, AI-assisted workflows) but introduces **native multi-IDE profile detection**, **categorized `.mdc` rule injection**, and **multi-language AST-grounded drift tracking**.
+---
 
-## Repository layout (`docs` / `specs` / `changes`)
+## 🤯 Did You Know? (The Interesting Facts)
 
-ReOpenSpec assumes (and `reo init` creates) a strict, traceable three-tier architecture at the project root:
+*   **Fact #1: AI Agents suffer from "Context Pollution".** If you dump your entire project history and dozens of architectural decision records (ADRs) into an AI's prompt, it gets confused and hallucinates connections. ReOpenSpec solves this by strictly archiving completed work and only feeding the agent the *active* specs it needs right now.
+*   **Fact #2: It actually reads your code's mind (AST).** Unlike tools that just perform dumb text-searches, ReOpenSpec uses **AST (Abstract Syntax Tree)** parsing (via `ast-grep`) for TypeScript. It *knows* exactly what a module exports and imports, building a mathematical graph of your application in `arch-baseline.json`.
+*   **Fact #3: It is a Chameleon.** Run `reo init` and it sniffs out your environment. Are you writing PHP with React in Windsurf? Or C# with Vue in Cursor? ReOpenSpec auto-detects your primary stack and your preferred IDE, injecting specifically tailored `.mdc` rules so your agent behaves perfectly for *your* exact setup.
+*   **Fact #4: It catches architectural "Drift".** Your AI agent promised to update the `PaymentService` interface, but did it really? ReOpenSpec compares your rigorously documented `api-contracts.json` against the live code baseline to catch architectural drift instantly.
 
-| Path | Role |
-|------|------|
-| **`reopenspec/docs/`** | Architecture narratives, ADRs, runbooks, team conventions — high-level context that is **not** the live behavioral contract. |
-| **`reopenspec/specs/`** | Domain behavior, scenarios, and **`api-contracts.json`** — the **source of truth**, cross-checked against code via deterministic drift detection. |
-| **`reopenspec/changes/active/`** | In-flight work: one folder per story, task, or bug (e.g. `task-azure-1234`) managed by a strict `change.yaml` scaffold and tracking `/reo-plan` deltas. |
-| **`reopenspec/changes/completed/`** | Done work: Moved here automatically with a date prefix upon `/reo-completed` to cleanly archive context without polluting the agent's main memory. |
+---
 
-See **[`reopenspec/docs/reopenspec-model.md`](reopenspec/docs/reopenspec-model.md)** for the full architectural model.
+## 🏗️ The 3-Tier Architecture Philosophy
 
-## Requirements
+ReOpenSpec forces a heavily structured, traceable workflow on your repository:
 
-- **Node.js 20+**
+| Where it lives | What it is | Agent's Relationship |
+|------|------|------|
+| **`reopenspec/docs/`** | Human narratives, ADRs, runbooks, and team guidelines. | High-level context. This is **not** the live behavioral contract. |
+| **`reopenspec/specs/`** | Domain behaviors, scenarios, and **`api-contracts.json`**. | **Source of Truth.** The AI must rigorously adhere to this. |
+| **`reopenspec/changes/`** | In-flight work (`active/`) and archived work (`completed/`). | The AI's scratchpad. Completed work is archived to keep main memory clean! |
 
-## Install
+*(See [`reopenspec/docs/reopenspec-model.md`](reopenspec/docs/reopenspec-model.md) for the deep dive).*
 
+---
+
+## ⚡ Quick Start
+
+### 1. Install
+Require Node.js 20+.
 ```bash
 npm install -g reopenspec
 ```
 
-Check: `reo --help`
-
-## Quick start
-
-### 1. Initialize the Workspace
-
-In your project root:
-
+### 2. Bootstrapping Magic
+In your project root, run:
 ```bash
 reo init
 ```
+*What just happened?* ReOpenSpec auto-detected your language, your frameworks, and your IDE. It created the 3-tier folder structure, mapped your codebase into an `arch-baseline.json`, and injected targeted semantic agent rules.
 
-This acts as your unified bootstrap. It creates the repository layout, writes `reopenspec.json`, runs an initial baseline scan, **auto-detects your IDE profile** (Cursor, Roo, or Windsurf), and strictly injects categorized `.mdc` rules and slash-command templates (`.cursor/commands/`, `.windsurf/`, etc.) based on your primary language and IDE. 
-
-*(Use `reo init --skip-workflow` to only generate the baseline and config.)*
-
-### 2. The 5-Step Traceable Feature Flow
-
-ReOpenSpec enforces a predictable lifecycle for AI coding agents:
-1. **`reo init`**: Establishes the workspace and syncs agent rule profiles.
-2. **`/reo-blueprint`**: Generates architecture specs based on the baseline and contextually activates IDE rules.
-3. **`/reo-plan`**: Connects via MCPs (Jira/Azure/Figma), parses dependencies, and provisions a heavily-traced scaffold under `reopenspec/changes/active/` driven by a concrete `change.yaml`.
-4. **`/reo-proceed-plan`**: Reads the active change folder and executes the feature implementation in isolated steps.
-5. **`/reo-completed`** (Human-run): Evaluates the proceed-plan work, proposes updates to `reopenspec/specs/`, and safely archives the work into `changes/completed/YYYY-MM-DD/` to lock the spec and erase short-term memory pollution.
-
-### 3. Track Contracts & Compute Drift
-
-Point contracts at real exports inside `reopenspec/specs/<feature>/api-contracts.json`:
-```json
-{
-  "id": "user-login",
-  "mapsTo": { "file": "src/services/LoginService.ts", "symbol": "LoginService", "kind": "export.class" }
-}
-```
-
-Then synchronize and calculate drift:
-
-```bash
-reo sync --verbose
-```
-*(Outputs to `reopenspec/specs/.meta/arch-baseline.json` and `drift-report.json`)*.
+### 3. The Traceable Feature Flow
+ReOpenSpec enforces predictability for AI agents:
+1. **`reo init`**: Setup environment and detect the stack.
+2. **`/reo-spec-blueprint`**: Discover and scaffold domain-wise architecture specs for brownfield projects.
+3. **`/reo-plan`**: Connect via MCPs (Jira/Azure/Figma), pull a story or bug, parse dependencies, and provision a strict `change.yaml` scaffold under the `active/` folder.
+4. **`/reo-proceed-plan`**: Execute the implementation in isolated, tracable steps based on the plan.
+5. **`/reo-completed`**: You review, the AI proposes updates to `reopenspec/specs/`, and safely archives the work into `changes/completed/YYYY-MM-DD/` to lock the spec and erase short-term memory pollution.
 
 ---
 
-## Commands
+## 🛠️ Command Reference
 
-| Command                           | Purpose                                                                                                                                   |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `reo init`                        | First-time: dirs, config, baseline scan, dynamic IDE profile detection, and contextual rule/workflow injection.                           |
-| `reo init --skip-workflow`        | Core initialization without injecting `.mdc` rules or IDE templates.                                                                      |
-| `reo sync`                        | Full workspace scan + structural drift report computation against active contracts.                                                       |
-| `reo scan`                        | Generate and write `arch-baseline.json` only.                                                                                             |
-| `reo drift` / `reo diff`          | Check codebase drift solely against `reopenspec/specs/*/api-contracts.json`.                                                              |
-| `reo doctor`                      | Checks workspace health (validates config, directories, and spec contract references).                                                    |
-| `reo spec new <slug>`             | Scaffold a fresh domain feature folder + `.spec-meta.json`.                                                                               |
-| `reo inject`                      | Hard force re-apply of the latest dynamic categorised IDE rules.                                                                          |
-| `reo config`                      | Show or create your `reopenspec.json`.                                                                                                    |
-| `reo status`                      | Prints config paths + high-level baseline/drift summary.                                                                                  |
-| `reo hooks install` / `uninstall` | Git pre-commit hook (`reo sync`) to ensure contracts are strictly enforced on commit.                                                     |
+| Command | Purpose |
+| :--- | :--- |
+| `reo init` | First-time boilerplate: directories, config, baseline scan, dynamic IDE profile detection, and contextual rule injection. |
+| `reo init --skip-workflow` | Core initialization only. Scans baseline and creates config without injecting `.mdc` rules or templates. |
+| `reo sync` | Full workspace scan + structural drift report computation against active contracts. |
+| `reo scan` | Generate and write `arch-baseline.json` on demand. |
+| `reo drift` / `reo diff` | Check codebase drift solely against `reopenspec/specs/*/api-contracts.json`. |
+| `reo doctor` | Validate workspace health (checks config, directories, and spec contract references). |
+| `reo inject` | Hard force re-apply of the latest dynamic categorized IDE rules. |
 
-Run `reo <command> --help` for flags. *(Tip: Use `--verbose` on `reo scan` or `reo sync` for detailed node-extraction logs).*
+*(Run `reo <command> --help` for flags. Pro-tip: Use `--verbose` on `reo scan` or `reo sync` for detailed node-extraction logs).*
 
-## Languages
+---
 
-ReOpenSpec organically traverses multi-language workspaces using a unified Parser Adapter pattern.
+## 🌍 Language Support
 
-- **TypeScript / TSX** — via [ast-grep](https://ast-grep.github.io/) (`@ast-grep/napi`): true AST parsing for exports and imports.
-- **C# / .NET** — heuristic scan (namespaces, classes, interfaces, records, functions, and `using` module specs).
-- **Python** — heuristic scan (classes, `def` functions, and aliased imports).
-- **PHP** — heuristic scan (namespaces, classes, interfaces, traits, functions, and `use` aliases).
-- **Dart / Flutter** — heuristic scan (imports + top-level declarations); `build/` and `.dart_tool/` are ignored.
+ReOpenSpec organically traverses multi-language workspaces using a unified Parser Adapter pattern:
 
-## Under the Hood: The Rules Engine
+- **TypeScript / TSX** — True AST parsing for exports and imports via `@ast-grep/napi`.
+- **C# / .NET** — Heuristic scan (namespaces, classes, interfaces, records, functions, and `using` module specs).
+- **Python** — Heuristic scan (classes, `def` functions, and aliased imports).
+- **PHP** — Heuristic scan (namespaces, classes, interfaces, traits, functions, and `use` aliases).
+- **Dart / Flutter** — Heuristic scan (imports + top-level declarations); ignores build tools automatically.
 
-ReOpenSpec's secret weapon is how it handles Context Pollution. During `reo init` and `reo inject`, the CLI doesn't just dump 5,000 lines of prompt into your agents. It detects the active profile (e.g. PHP + React) and strategically copies `.mdc` standard files into place, defining explicit activation triggers (e.g. "always-on" vs. "agent-requested"). 
+---
 
-## Configuration
+## 📄 License
 
-`reopenspec.json` at the repo root (or `reopenspec/specs/.meta/reopenspec.json`) sets your project directives:
-- `baselinePath`
-- `driftReportPath`
-- `specsDir`
-- `strictUncovered`
-
-## VS Code
-
-A minimal extension lives under `editors/vscode/` (config editor + run sync). Build it with `npm run vscode:compile` from the repo.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE). Go build smarter things.

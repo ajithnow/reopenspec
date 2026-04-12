@@ -474,4 +474,6 @@ Status codes:
 | `CONFIG_REQUIRED` | Missing `.reopenspec.user.yaml` or critical config |
 
 Details: Project analyzed, `reopenspec.project.yaml` ensured, rules generated  
-Next: `/reo-plan` (with story/task/bug id or manual brief); optional `reo spec new <slug>` for main-line specs under `reopenspec/specs/`
+
+**Next Steps — Brownfield**: Run `/reo-spec-blueprint` to discover domains and generate domain-wise specs.  
+**Next Steps — Greenfield**: Run `/reo-plan` to start implementing your first feature.

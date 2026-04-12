@@ -61,6 +61,8 @@ After you verify proceed-plan work is done, run **`/reo-completed @reopenspec/ch
 | File | Slash | Purpose |
 |------|--------|---------|
 | `reo-blueprint.md` | `/reo-blueprint` | Project YAML + docs + rules |
+| `reo-spec-blueprint.md` | `/reo-spec-blueprint` | Brownfield only: Domain discovery and proposal |
+| `generate-domain-spec.md` | `/generate-domain-spec` | Brownfield only: Scaffolding `<domain>/<domain>.md` |
 | `reo-plan.md` | `/reo-plan` | Work item + delta → `reopenspec/changes/active/…/` |
 | `reo-story-skill.md` | `/reo-story-skill` | Story fetch helper (usually nested in plan) |
 | `reo-task-skill.md` | `/reo-task-skill` | Task + deps helper |
