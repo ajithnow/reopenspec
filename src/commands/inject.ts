@@ -40,7 +40,7 @@ export default class Inject extends Command {
     // Categorized rules injection (.mdc files)
     const detected = detectStackProfile(cwd)
     if (isDartOrFlutterStack(detected)) {
-      await offerFlutterSkillsGuidance((m) => this.log(m))
+      await offerFlutterSkillsGuidance((m: string) => this.log(m))
     }
 
     for (const ide of ides) {

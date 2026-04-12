@@ -60,7 +60,7 @@ export default class Doctor extends Command {
 
     const stack = detectStackProfile(cwd)
     if (isDartOrFlutterStack(stack)) {
-      await offerFlutterSkillsGuidance((m) => this.log(m), { linePrefix: '  ' })
+      await offerFlutterSkillsGuidance((m: string) => this.log(m), { linePrefix: '  ' })
     }
 
     // We import dynamically to avoid huge memory hit or cyclic deps if any

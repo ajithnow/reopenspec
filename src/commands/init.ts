@@ -270,7 +270,7 @@ export default class Init extends Command {
     }
 
     if (isDartOrFlutterStack(detectStackProfile(cwd))) {
-      await offerFlutterSkillsGuidance((m) => this.log(m))
+      await offerFlutterSkillsGuidance((m: string) => this.log(m))
     }
 
     for (const ide of ides) {
